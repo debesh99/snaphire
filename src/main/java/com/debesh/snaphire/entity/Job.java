@@ -72,4 +72,19 @@ public class Job {
     public void setMaxSalary(long maxSalary) {
         this.maxSalary = maxSalary;
     }
+
+    @Override
+    public String toString() {
+        return "Job{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", location='" + location + '\'' +
+                ", minSalary=" + minSalary +
+                ", maxSalary=" + maxSalary +
+                '}';
+    }
+
+    public Job() {
+    }
 }
