@@ -25,20 +25,27 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public boolean deleteJobById(long id) throws Exception {
-        try {
+    public boolean deleteJobById(long id){
+        boolean isPresent = jobRepository.existsById(id);
+        if(isPresent){
             jobRepository.deleteById(id);
             return true;
-        } catch (Exception e) {
-            throw new Exception("Job id not found for delete operation");
+        }else{
+            return false;
         }
     }
 
     @Override
     public boolean updateJob(long id, Job updatedJob) {
-        Optional<Job> jobId = jobRepository.findById(id);
-        if (jobId.isPresent()) {
-            jobRepository.save(updatedJob);
+        Optional<Job> jobOptional = jobRepository.findById(id);
+        if (jobOptional.isPresent()) {
+            Job existingJob = jobOptional.get();
+            existingJob.setTitle(updatedJob.getTitle());
+            existingJob.setDescription(updatedJob.getDescription());
+            existingJob.setLocation(updatedJob.getLocation());
+            existingJob.setMinSalary(updatedJob.getMinSalary());
+            existingJob.setMaxSalary(updatedJob.getMaxSalary());
+            jobRepository.save(existingJob);
             return true;
         }
         return false;

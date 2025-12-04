@@ -85,6 +85,7 @@ public class Job {
                 '}';
     }
 
+    //Default constructor is created to get all the jobs at once, used by job service
     public Job() {
     }
 }

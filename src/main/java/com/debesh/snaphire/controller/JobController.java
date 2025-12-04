@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -19,7 +20,7 @@ public class JobController {
     JobService jobService;
 
     @PostMapping("/jobs")
-    public ResponseEntity<?> createJob(@RequestBody Job job){
+    public ResponseEntity<?> createJob(@RequestBody Job job) {
         LOGGER.info("Creating job: {}", job);
         jobService.createJob(job);
         return new ResponseEntity<>("Job is created", HttpStatus.CREATED);
@@ -44,6 +45,7 @@ public class JobController {
             if (deleted) {
                 return new ResponseEntity<>("Job deleted", HttpStatus.OK);
             } else {
+                LOGGER.error("Job not found");
                 return new ResponseEntity<>("Job not found", HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
