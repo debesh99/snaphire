@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/jobs")
 public class JobController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JobController.class);
@@ -19,14 +20,14 @@ public class JobController {
     @Autowired
     JobService jobService;
 
-    @PostMapping("/jobs")
+    @PostMapping()
     public ResponseEntity<?> createJob(@RequestBody Job job) {
         LOGGER.info("Creating job: {}", job);
         jobService.createJob(job);
         return new ResponseEntity<>("Job is created", HttpStatus.CREATED);
     }
 
-    @GetMapping("/jobs/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getJobById(@PathVariable long id) {
         LOGGER.info("Fetching job by id: {}", id);
         Job job = jobService.getJobById(id);
@@ -37,7 +38,7 @@ public class JobController {
         return new ResponseEntity<>(job, HttpStatus.OK);
     }
 
-    @DeleteMapping("/jobs/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteJobById(@PathVariable long id) {
         LOGGER.info("Deleting job by id: {}", id);
         try {
@@ -54,7 +55,7 @@ public class JobController {
         }
     }
 
-    @PutMapping("/jobs/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateJob(@PathVariable long id, @RequestBody Job updatedJob) {
         LOGGER.info("Updating job id {}: {}", id, updatedJob);
         boolean updated = jobService.updateJob(id, updatedJob);
@@ -65,7 +66,7 @@ public class JobController {
         }
     }
 
-    @GetMapping("/jobs")
+    @GetMapping()
     public ResponseEntity<?> findAll() {
         LOGGER.info("Getting all jobs");
         List<Job> jobs = jobService.findAllJobs();

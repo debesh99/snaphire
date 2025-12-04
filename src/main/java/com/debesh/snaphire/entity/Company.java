@@ -1,9 +1,10 @@
 package com.debesh.snaphire.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+import java.util.List;
+
+@Entity
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,10 +12,21 @@ public class Company {
     private String name;
     private String description;
 
+    @OneToMany
+    private List<Job> jobs;
+
     public Company(long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
+    }
+
+    public List<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(List<Job> jobs) {
+        this.jobs = jobs;
     }
 
     public Company() {

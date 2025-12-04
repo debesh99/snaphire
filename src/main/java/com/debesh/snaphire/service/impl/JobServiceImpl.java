@@ -30,9 +30,8 @@ public class JobServiceImpl implements JobService {
         if(isPresent){
             jobRepository.deleteById(id);
             return true;
-        }else{
-            return false;
         }
+        return false;
     }
 
     @Override
