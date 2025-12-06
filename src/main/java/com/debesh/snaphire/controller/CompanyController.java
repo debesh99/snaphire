@@ -28,41 +28,30 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCompanyById(@PathVariable long id) {
+    public ResponseEntity<Company> getCompanyById(@PathVariable long id) {
         LOGGER.info("Fetching company by id: {}", id);
         Company company = companyService.getCompanyById(id);
-        if (company == null) {
-            return new ResponseEntity<>("Company not found", HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<>(company, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> createCompany(@RequestBody Company company) {
+    public ResponseEntity<String> createCompany(@RequestBody Company company) {
         LOGGER.info("Creating company: {}", company);
         companyService.createCompany(company);
         return new ResponseEntity<>("Company created", HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCompany(@PathVariable long id, @RequestBody Company updatedCompany) {
+    public ResponseEntity<String> updateCompany(@PathVariable long id, @RequestBody Company updatedCompany) {
         LOGGER.info("Updating company id {}: {}", id, updatedCompany);
-        boolean updated = companyService.updateCompany(id, updatedCompany);
-        if (updated) {
-            return new ResponseEntity<>("Company updated", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Company not found", HttpStatus.NOT_FOUND);
-        }
+        companyService.updateCompany(id, updatedCompany);
+        return new ResponseEntity<>("Company updated", HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCompany(@PathVariable long id) {
+    public ResponseEntity<String> deleteCompany(@PathVariable long id) {
         LOGGER.info("Deleting company by id: {}", id);
-        boolean deleted = companyService.deleteCompanyById(id);
-        if (deleted) {
-            return new ResponseEntity<>("Company deleted", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Company not found", HttpStatus.NOT_FOUND);
-        }
+        companyService.deleteCompanyById(id);
+        return new ResponseEntity<>("Company deleted", HttpStatus.OK);
     }
 }

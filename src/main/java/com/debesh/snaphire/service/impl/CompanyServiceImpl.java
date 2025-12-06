@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -27,30 +26,21 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company getCompanyById(long id) {
-        return companyRepository.findById(id).orElseThrow(()->new CompanyNotFoundException("Company doesn't exist"));
+    public Company getCompanyById(long id) throws CompanyNotFoundException {
+        return companyRepository.findById(id).orElseThrow(() -> new CompanyNotFoundException("Company doesn't exist"));
     }
 
     @Override
-    public boolean updateCompany(long id, Company updatedCompany) {
-        Optional<Company> companyOptional = companyRepository.findById(id);
-        if (companyOptional.isPresent()) {
-            Company existingCompany = companyOptional.get();
-            existingCompany.setName(updatedCompany.getName());
-            existingCompany.setDescription(updatedCompany.getDescription());
-            companyRepository.save(existingCompany);
-            return true;
-        }
-        return false;
+    public void updateCompany(long id, Company updatedCompany) {
+        Company existingCompany = companyRepository.findById(id).orElseThrow(() -> new CompanyNotFoundException("Company doesn't exist"));
+        existingCompany.setName(updatedCompany.getName());
+        existingCompany.setDescription(updatedCompany.getDescription());
+        companyRepository.save(existingCompany);
     }
 
     @Override
-    public boolean deleteCompanyById(long id) {
-        Optional<Company> companyOpt = companyRepository.findById(id);
-        if(companyOpt.isPresent()){
-            companyRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void deleteCompanyById(long id) {
+        Company existingCompany = companyRepository.findById(id).orElseThrow(() -> new CompanyNotFoundException("Company doesn't exist"));
+        companyRepository.deleteById(id);
     }
 }
