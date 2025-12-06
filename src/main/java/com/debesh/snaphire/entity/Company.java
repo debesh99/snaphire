@@ -17,6 +17,9 @@ public class Company {
     @JsonIgnore
     private List<Job> jobs;
 
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
     public Company(Long id, String name, String description) {
         this.id = id;
         this.name = name;
@@ -58,6 +61,14 @@ public class Company {
         this.description = description;
     }
 
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
     @Override
     public String toString() {
         return "Company{" +
@@ -65,6 +76,7 @@ public class Company {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", jobs=" + jobs +
+                ", reviews=" + reviews +
                 '}';
     }
 }
