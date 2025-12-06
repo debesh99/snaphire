@@ -18,9 +18,9 @@ public class CompanyController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyController.class);
 
     @Autowired
-    private CompanyService companyService;
+    CompanyService companyService;
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<Company>> getAllCompanies() {
         LOGGER.info("Fetching all companies");
         List<Company> companies = companyService.getAllCompanies();
@@ -37,7 +37,7 @@ public class CompanyController {
         return new ResponseEntity<>(company, HttpStatus.OK);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<?> createCompany(@RequestBody Company company) {
         LOGGER.info("Creating company: {}", company);
         companyService.createCompany(company);

@@ -1,9 +1,6 @@
 package com.debesh.snaphire.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Job {
@@ -15,7 +12,11 @@ public class Job {
     private String location;
     private long minSalary;
     private long maxSalary;
-
+    
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
+    
     public Job(Long id, String title, String description, String location, long minSalary, long maxSalary) {
         this.id = id;
         this.title = title;
@@ -71,6 +72,14 @@ public class Job {
 
     public void setMaxSalary(long maxSalary) {
         this.maxSalary = maxSalary;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.debesh.snaphire.entity.Job;
 import java.util.List;
 
 public interface JobService {
-    void createJob(Job job);
+    boolean createJob(Job job) throws Exception;
 
     Job getJobById(long id);
 

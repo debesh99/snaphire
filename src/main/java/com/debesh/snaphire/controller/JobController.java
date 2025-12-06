@@ -20,11 +20,13 @@ public class JobController {
     @Autowired
     JobService jobService;
 
-    @PostMapping()
-    public ResponseEntity<?> createJob(@RequestBody Job job) {
+    @PostMapping
+    public ResponseEntity<?> createJob(@RequestBody Job job) throws Exception {
         LOGGER.info("Creating job: {}", job);
-        jobService.createJob(job);
-        return new ResponseEntity<>("Job is created", HttpStatus.CREATED);
+        if(jobService.createJob(job)){
+            return new ResponseEntity<>("Job is created", HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>("Company doesn't exist", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{id}")
@@ -66,7 +68,7 @@ public class JobController {
         }
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> findAll() {
         LOGGER.info("Getting all jobs");
         List<Job> jobs = jobService.findAllJobs();
