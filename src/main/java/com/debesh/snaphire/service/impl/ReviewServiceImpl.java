@@ -22,44 +22,55 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public boolean createReview(Long companyId, Review review) {
         Company company = companyService.getCompanyById(companyId);
-        if (company != null) {
-            review.setCompany(company);
-            reviewRepository.save(review);
-            return true;
-        }
-        return false;
+        review.setCompany(company);
+        reviewRepository.save(review);
+        return true;
     }
 
     @Override
     public boolean deleteReviewById(Long companyId, Long id) {
-        return false;
+        companyService.getCompanyById(companyId);
+        Review review = findReviewById(id);
+        verifyReviewBelongsToCompany(review, companyId);
+        reviewRepository.deleteById(id);
+        return true;
     }
 
     @Override
     public List<Review> getAllReviews(Long companyId) {
+        companyService.getCompanyById(companyId);
         return reviewRepository.findByCompanyId(companyId);
     }
 
     @Override
     public Review getReviewById(Long companyId, Long reviewId) {
-        // Verify company exists
-        Company company = companyService.getCompanyById(companyId);
-
-        // Find review and verify it exists and belongs to the company
-        Review review = reviewRepository.findById(reviewId).orElseThrow(() ->
-                new ReviewNotFoundException("Review with id " + reviewId + " not found"));
-        
-        // Verify review belongs to the specified company
-        if (review.getCompany().getId() != companyId) {
-            throw new ReviewNotFoundException(
-                "Review with id " + reviewId + " does not belong to company with id " + companyId);
-        }
-        
+        companyService.getCompanyById(companyId);
+        Review review = findReviewById(reviewId);
+        verifyReviewBelongsToCompany(review, companyId);
         return review;
     }
 
     @Override
     public boolean updateReview(Long companyId, Review review) {
-        return false;
+        companyService.getCompanyById(companyId);
+        Review existingReview = findReviewById(review.getId());
+        verifyReviewBelongsToCompany(existingReview, companyId);
+        existingReview.setTitle(review.getTitle());
+        existingReview.setDescription(review.getDescription());
+        existingReview.setRating(review.getRating());
+        reviewRepository.save(existingReview);
+        return true;
+    }
+
+    private Review findReviewById(Long reviewId) throws ReviewNotFoundException {
+        return reviewRepository.findById(reviewId).orElseThrow(() ->
+                new ReviewNotFoundException("Review with id " + reviewId + " not found"));
+    }
+
+    private void verifyReviewBelongsToCompany(Review review, Long companyId) throws ReviewNotFoundException {
+        if (review.getCompany().getId() != companyId) {
+            throw new ReviewNotFoundException(
+                    "Review with id " + review.getId() + " does not belong to company with id " + companyId);
+        }
     }
 }
