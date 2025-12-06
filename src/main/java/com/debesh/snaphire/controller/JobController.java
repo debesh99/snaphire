@@ -16,60 +16,40 @@ import java.util.List;
 public class JobController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JobController.class);
-
+//    All the errors are handled by GlobalExceptionHandler.class, no need to mention it explicitly
     @Autowired
     JobService jobService;
 
     @PostMapping
-    public ResponseEntity<?> createJob(@RequestBody Job job) throws Exception {
+    public ResponseEntity<String> createJob(@RequestBody Job job) {
         LOGGER.info("Creating job: {}", job);
-        if(jobService.createJob(job)){
-            return new ResponseEntity<>("Job is created", HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>("Company doesn't exist", HttpStatus.NOT_FOUND);
+        jobService.createJob(job);
+        return new ResponseEntity<>("Job created successfully", HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getJobById(@PathVariable long id) {
+    public ResponseEntity<Job> getJobById(@PathVariable Long id) {
         LOGGER.info("Fetching job by id: {}", id);
         Job job = jobService.getJobById(id);
-        if (job == null) {
-            LOGGER.warn("Job not found for id: {}", id);
-            return new ResponseEntity<>("Job not found", HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<>(job, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteJobById(@PathVariable long id) {
+    public ResponseEntity<String> deleteJobById(@PathVariable Long id) {
         LOGGER.info("Deleting job by id: {}", id);
-        try {
-            boolean deleted = jobService.deleteJobById(id);
-            if (deleted) {
-                return new ResponseEntity<>("Job deleted", HttpStatus.OK);
-            } else {
-                LOGGER.error("Job not found");
-                return new ResponseEntity<>("Job not found", HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            LOGGER.error("Exception deleting job by id {}: {}", id, e.getMessage());
-            return new ResponseEntity<>("Error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        jobService.deleteJobById(id);
+        return new ResponseEntity<>("Job deleted successfully", HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateJob(@PathVariable long id, @RequestBody Job updatedJob) {
+    public ResponseEntity<String> updateJob(@PathVariable Long id, @RequestBody Job updatedJob) {
         LOGGER.info("Updating job id {}: {}", id, updatedJob);
-        boolean updated = jobService.updateJob(id, updatedJob);
-        if (updated) {
-            return new ResponseEntity<>("Job updated", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Job not found", HttpStatus.NOT_FOUND);
-        }
+        jobService.updateJob(id, updatedJob);
+        return new ResponseEntity<>("Job updated successfully", HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<List<Job>> findAll() {
         LOGGER.info("Getting all jobs");
         List<Job> jobs = jobService.findAllJobs();
         return new ResponseEntity<>(jobs, HttpStatus.OK);

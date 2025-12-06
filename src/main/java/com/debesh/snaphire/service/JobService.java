@@ -1,17 +1,19 @@
 package com.debesh.snaphire.service;
 
+import com.debesh.snaphire.Exception.CompanyNotFoundException;
+import com.debesh.snaphire.Exception.JobNotFoundException;
 import com.debesh.snaphire.entity.Job;
 
 import java.util.List;
 
 public interface JobService {
-    boolean createJob(Job job) throws Exception;
+    void createJob(Job job) throws CompanyNotFoundException;
 
-    Job getJobById(long id);
+    Job getJobById(Long id) throws JobNotFoundException;
 
-    boolean deleteJobById(long id);
+    boolean deleteJobById(Long id) throws JobNotFoundException;
 
-    boolean updateJob(long id, Job updatedJob);
+    void updateJob(Long id, Job updatedJob) throws JobNotFoundException;
 
     List<Job> findAllJobs();
 }

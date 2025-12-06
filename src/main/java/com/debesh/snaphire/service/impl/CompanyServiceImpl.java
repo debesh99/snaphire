@@ -1,5 +1,6 @@
 package com.debesh.snaphire.service.impl;
 
+import com.debesh.snaphire.Exception.CompanyNotFoundException;
 import com.debesh.snaphire.entity.Company;
 import com.debesh.snaphire.repository.CompanyRepository;
 import com.debesh.snaphire.service.CompanyService;
@@ -27,7 +28,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Company getCompanyById(long id) {
-        return companyRepository.findById(id).orElse(null);
+        return companyRepository.findById(id).orElseThrow(()->new CompanyNotFoundException("Company doesn't exist"));
     }
 
     @Override

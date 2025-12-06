@@ -1,5 +1,7 @@
 package com.debesh.snaphire.service.impl;
 
+import com.debesh.snaphire.Exception.CompanyNotFoundException;
+import com.debesh.snaphire.Exception.JobNotFoundException;
 import com.debesh.snaphire.entity.Company;
 import com.debesh.snaphire.entity.Job;
 import com.debesh.snaphire.repository.CompanyRepository;
@@ -23,50 +25,45 @@ public class JobServiceImpl implements JobService {
     CompanyRepository companyRepository;
 
     @Override
-    public boolean createJob(Job job) throws Exception {
+    public void createJob(Job job) throws CompanyNotFoundException {
         Optional<Company> company = companyRepository.findById(job.getCompany().getId());
-        if(company.isPresent()){
+        if (company.isPresent()) {
             jobRepository.save(job);
-            return true;
-        }else{
-            return false;
+        } else {
+            throw new CompanyNotFoundException("Company doesn't exist");
         }
     }
 
     @Override
-    public Job getJobById(long id) {
-        return jobRepository.findById(id).orElse(null);
+    public Job getJobById(Long id) throws JobNotFoundException {
+        return jobRepository.findById(id).orElseThrow(() -> new JobNotFoundException("Job not found"));
     }
 
     @Override
-    public boolean deleteJobById(long id){
+    public boolean deleteJobById(Long id) {
         boolean isPresent = jobRepository.existsById(id);
-        if(isPresent){
+        if (isPresent) {
             jobRepository.deleteById(id);
             return true;
         }
-        return false;
+        throw new JobNotFoundException("Job not found");
     }
 
     @Override
-    public boolean updateJob(long id, Job updatedJob) {
-        Optional<Job> jobOptional = jobRepository.findById(id);
-        if (jobOptional.isPresent()) {
-            Job existingJob = jobOptional.get();
-            existingJob.setTitle(updatedJob.getTitle());
-            existingJob.setDescription(updatedJob.getDescription());
-            existingJob.setLocation(updatedJob.getLocation());
-            existingJob.setMinSalary(updatedJob.getMinSalary());
-            existingJob.setMaxSalary(updatedJob.getMaxSalary());
-            jobRepository.save(existingJob);
-            return true;
-        }
-        return false;
+    public void updateJob(Long id, Job updatedJob) throws JobNotFoundException {
+        Job existingJob = jobRepository.findById(id).orElseThrow(() -> new JobNotFoundException("Job not found"));
+        existingJob.setTitle(updatedJob.getTitle());
+        existingJob.setDescription(updatedJob.getDescription());
+        existingJob.setLocation(updatedJob.getLocation());
+        existingJob.setMinSalary(updatedJob.getMinSalary());
+        existingJob.setMaxSalary(updatedJob.getMaxSalary());
+        jobRepository.save(existingJob);
     }
 
-    @Override
-    public List<Job> findAllJobs() {
-        return jobRepository.findAll();
-    }
+
+@Override
+public List<Job> findAllJobs() {
+    return jobRepository.findAll();
+}
 
 }

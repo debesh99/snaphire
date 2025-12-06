@@ -1,14 +1,17 @@
 package com.debesh.snaphire.service.impl;
 
+import com.debesh.snaphire.Exception.ReviewNotFoundException;
 import com.debesh.snaphire.entity.Company;
 import com.debesh.snaphire.entity.Review;
 import com.debesh.snaphire.repository.ReviewRepository;
 import com.debesh.snaphire.service.CompanyService;
 import com.debesh.snaphire.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ReviewServiceImpl implements ReviewService {
     @Autowired
     ReviewRepository reviewRepository;
@@ -39,14 +42,20 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Review getReviewById(Long companyId, Long reviewId) {
+        // Verify company exists
         Company company = companyService.getCompanyById(companyId);
-        if (company != null) {
-            Review review = reviewRepository.findById(reviewId).orElse(null);
-            if (review != null) {
-                return review;
-            }
+
+        // Find review and verify it exists and belongs to the company
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() ->
+                new ReviewNotFoundException("Review with id " + reviewId + " not found"));
+        
+        // Verify review belongs to the specified company
+        if (review.getCompany().getId() != companyId) {
+            throw new ReviewNotFoundException(
+                "Review with id " + reviewId + " does not belong to company with id " + companyId);
         }
-        return null;
+        
+        return review;
     }
 
     @Override
