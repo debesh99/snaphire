@@ -32,7 +32,7 @@ public class CompanyController {
         LOGGER.info("Fetching company by id: {}", id);
         Company company = companyService.getCompanyById(id);
         if (company == null) {
-            return new ResponseEntity<>("Company not found.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Company not found", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(company, HttpStatus.OK);
     }
