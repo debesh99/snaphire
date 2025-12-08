@@ -18,6 +18,7 @@ public class Company {
     private List<Job> jobs;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Review> reviews;
 
     public Company(Long id, String name, String description) {

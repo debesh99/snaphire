@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class JobServiceImpl implements JobService {
@@ -26,12 +25,8 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public void createJob(Job job) throws CompanyNotFoundException {
-        Optional<Company> company = companyRepository.findById(job.getCompany().getId());
-        if (company.isPresent()) {
-            jobRepository.save(job);
-        } else {
-            throw new CompanyNotFoundException("Company doesn't exist");
-        }
+        Company company = companyRepository.findById(job.getCompany().getId()).orElseThrow(() -> new CompanyNotFoundException("Company not found"));
+        jobRepository.save(job);
     }
 
     @Override

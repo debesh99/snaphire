@@ -10,20 +10,21 @@ public class Job {
     private String title;
     private String description;
     private String location;
-    private long minSalary;
-    private long maxSalary;
+    private Long minSalary;
+    private Long maxSalary;
     
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
-    
-    public Job(Long id, String title, String description, String location, long minSalary, long maxSalary) {
-        this.id = id;
+
+    public Job(Long id, String title, String description, String location, Long minSalary, Long maxSalary, Company company) {
+//        this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
         this.minSalary = minSalary;
         this.maxSalary = maxSalary;
+        this.company = company;
     }
 
     public Long getId() {
@@ -58,19 +59,19 @@ public class Job {
         this.location = location;
     }
 
-    public long getMinSalary() {
+    public Long getMinSalary() {
         return minSalary;
     }
 
-    public void setMinSalary(long minSalary) {
+    public void setMinSalary(Long minSalary) {
         this.minSalary = minSalary;
     }
 
-    public long getMaxSalary() {
+    public Long getMaxSalary() {
         return maxSalary;
     }
 
-    public void setMaxSalary(long maxSalary) {
+    public void setMaxSalary(Long maxSalary) {
         this.maxSalary = maxSalary;
     }
 
@@ -82,6 +83,10 @@ public class Job {
         this.company = company;
     }
 
+    //Default constructor is created to get all the jobs at once, used by job service
+    public Job() {
+    }
+
     @Override
     public String toString() {
         return "Job{" +
@@ -91,10 +96,7 @@ public class Job {
                 ", location='" + location + '\'' +
                 ", minSalary=" + minSalary +
                 ", maxSalary=" + maxSalary +
+                ", company=" + company +
                 '}';
-    }
-
-    //Default constructor is created to get all the jobs at once, used by job service
-    public Job() {
     }
 }
