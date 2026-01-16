@@ -25,15 +25,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     //Handling Company Not Found Exception
-    @ExceptionHandler(CompanyNotFoundException.class)
-    public ResponseEntity<ErrorOutputModel> handleCompanyNotFoundException(Exception e) {
+    @ExceptionHandler(ApplicationNotFoundException.class)
+    public ResponseEntity<ErrorOutputModel> handleApplicationNotFoundException(Exception e) {
         ErrorOutputModel error = new ErrorOutputModel(HttpStatus.NOT_FOUND.value(), e.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     //handling Review Not found Exception
-    @ExceptionHandler(ReviewNotFoundException.class)
-    public ResponseEntity<ErrorOutputModel> handleReviewNotFoundException(Exception e) {
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorOutputModel> handleUserNotFoundException(Exception e) {
         ErrorOutputModel error = new ErrorOutputModel(HttpStatus.NOT_FOUND.value(), e.getMessage());
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }

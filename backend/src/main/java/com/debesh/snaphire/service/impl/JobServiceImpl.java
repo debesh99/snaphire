@@ -1,8 +1,6 @@
 package com.debesh.snaphire.service.impl;
 
-import com.debesh.snaphire.Exception.CompanyNotFoundException;
 import com.debesh.snaphire.Exception.JobNotFoundException;
-import com.debesh.snaphire.entity.Company;
 import com.debesh.snaphire.entity.Job;
 import com.debesh.snaphire.repository.CompanyRepository;
 import com.debesh.snaphire.repository.JobRepository;
@@ -24,8 +22,7 @@ public class JobServiceImpl implements JobService {
     CompanyRepository companyRepository;
 
     @Override
-    public void createJob(Job job) throws CompanyNotFoundException {
-        Company company = companyRepository.findById(job.getCompany().getId()).orElseThrow(() -> new CompanyNotFoundException("Company not found"));
+    public void createJob(Job job){
         jobRepository.save(job);
     }
 

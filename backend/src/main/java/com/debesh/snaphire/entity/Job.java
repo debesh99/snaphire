@@ -2,29 +2,39 @@ package com.debesh.snaphire.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String company;
     private String title;
     private String description;
     private String location;
     private Long minSalary;
     private Long maxSalary;
-    
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
 
-    public Job(Long id, String title, String description, String location, Long minSalary, Long maxSalary, Company company) {
-//        this.id = id;
+    // --- CORRECTED RELATIONSHIP ---
+    // 1. Must be a List (One Job -> Many Applications)
+    // 2. 'mappedBy = "job"' means the Foreign Key is in the Application table
+    // 3. Cascade ALL: If you delete a Job, delete all its Applications too.
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Application> applications;
+
+    public Job(Long id, String title, String company, String description, String location, Long minSalary, Long maxSalary, List<Application> applications) {
+        this.id = id;
+        this.company=company;
         this.title = title;
         this.description = description;
         this.location = location;
         this.minSalary = minSalary;
         this.maxSalary = maxSalary;
-        this.company = company;
+        this.applications = applications;
+    }
+
+    public Job() {
     }
 
     public Long getId() {
@@ -33,6 +43,14 @@ public class Job {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public String getTitle() {
@@ -75,28 +93,25 @@ public class Job {
         this.maxSalary = maxSalary;
     }
 
-    public Company getCompany() {
-        return company;
+    public List<Application> getApplications() {
+        return applications;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
-    }
-
-    //Default constructor is created to get all the jobs at once, used by job service
-    public Job() {
+    public void setApplications(List<Application> applications) {
+        this.applications = applications;
     }
 
     @Override
     public String toString() {
         return "Job{" +
                 "id=" + id +
+                ", company='" + company +'\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", location='" + location + '\'' +
                 ", minSalary=" + minSalary +
                 ", maxSalary=" + maxSalary +
-                ", company=" + company +
+                ", applications=" + applications +
                 '}';
     }
 }
