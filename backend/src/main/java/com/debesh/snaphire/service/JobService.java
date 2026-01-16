@@ -10,7 +10,7 @@ public interface JobService {
 
     Job getJobById(Long id) throws JobNotFoundException;
 
-    boolean deleteJobById(Long id) throws JobNotFoundException;
+    void deleteJobById(Long id) throws JobNotFoundException;
 
     void updateJob(Long id, Job updatedJob) throws JobNotFoundException;
 
