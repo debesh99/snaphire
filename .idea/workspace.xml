@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="662ede2d-d3a0-4193-a6e3-214a2af0dc94" name="Changes" comment="Update job service class">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/controller/UserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/impl/UserServiceImpl.java" afterDir="false" />
+    <list default="true" id="662ede2d-d3a0-4193-a6e3-214a2af0dc94" name="Changes" comment="Added user repo, interface &amp; service class">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/controller/ApplicationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/repository/ApplicationRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/ApplicationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/impl/ApplicationServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/entity/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/entity/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/repository/UserRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,8 +30,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -321,7 +323,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768587318389</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Added user repo, interface &amp; service class">
+      <option name="closed" value="true" />
+      <created>1768588160259</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1768588160259</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -339,7 +349,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added sprinf folders" />
     <MESSAGE value="updated application.properties" />
     <MESSAGE value="added job service class, repository and entity" />
     <MESSAGE value="established proper connection with database" />
@@ -364,7 +373,8 @@
     <MESSAGE value="dummy commit" />
     <MESSAGE value="Removed unused entities and added new entities" />
     <MESSAGE value="Update job service class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update job service class" />
+    <MESSAGE value="Added user repo, interface &amp; service class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added user repo, interface &amp; service class" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/snaphire$SnaphireApplication.ic" NAME="SnaphireApplication Coverage Results" MODIFIED="1768118542491" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">

@@ -61,11 +61,11 @@ public class Application {
 
     @Override
     public String toString() {
-        return "Candidate{" +
+        return "Application{" +
                 "id=" + id +
                 ", appliedAt=" + appliedAt +
-                ", job=" + job +
-                ", candidate=" + candidate +
+                ", jobId=" + (job != null ? job.getId() : "null") + // Print ID only
+                ", candidateId=" + (candidate != null ? candidate.getId() : "null") + // Print ID only
                 '}';
     }
 }
