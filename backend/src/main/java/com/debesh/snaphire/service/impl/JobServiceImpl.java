@@ -1,6 +1,6 @@
 package com.debesh.snaphire.service.impl;
 
-import com.debesh.snaphire.Exception.JobNotFoundException;
+import com.debesh.snaphire.exception.JobNotFoundException;
 import com.debesh.snaphire.entity.Job;
 import com.debesh.snaphire.repository.JobRepository;
 import com.debesh.snaphire.service.JobService;

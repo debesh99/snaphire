@@ -1,4 +1,4 @@
-package com.debesh.snaphire.Model;
+package com.debesh.snaphire.model;
 
 public enum Role {
     RECRUITER,

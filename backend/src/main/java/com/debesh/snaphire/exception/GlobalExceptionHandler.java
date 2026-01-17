@@ -1,6 +1,6 @@
-package com.debesh.snaphire.Exception;
+package com.debesh.snaphire.exception;
 
-import com.debesh.snaphire.Model.ErrorOutputModel;
+import com.debesh.snaphire.model.ErrorOutputModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

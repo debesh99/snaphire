@@ -1,6 +1,6 @@
 package com.debesh.snaphire.entity;
 
-import com.debesh.snaphire.Model.Role;
+import com.debesh.snaphire.model.Role;
 import jakarta.persistence.*;
 
 @Entity

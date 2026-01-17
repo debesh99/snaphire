@@ -1,4 +1,4 @@
-package com.debesh.snaphire.Exception;
+package com.debesh.snaphire.exception;
 
 public class ApplicationNotFoundException extends RuntimeException {
     

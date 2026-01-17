@@ -1,12 +1,13 @@
 package com.debesh.snaphire.service.impl;
 
-import com.debesh.snaphire.Exception.UserNotFoundException;
 import com.debesh.snaphire.entity.User;
+import com.debesh.snaphire.exception.UserNotFoundException;
 import com.debesh.snaphire.repository.UserRepository;
 import com.debesh.snaphire.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +19,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
-    public User createUser(User user) {
+    public void createUser(User user) {
         // 1. Check if email already exists
         if (userRepository.existsByEmail(user.getEmail())) {
             LOGGER.error("Creation failed. Email {} already exists.", user.getEmail());
@@ -27,10 +31,11 @@ public class UserServiceImpl implements UserService {
         }
 
         // 2. Save User
-        // TODO: In the future, encrypt the password here using BCryptPasswordEncoder
+        // ENCRYPT PASSWORD BEFORE SAVING
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         User savedUser = userRepository.save(user);
         LOGGER.info("User created successfully with ID: {}", savedUser.getId());
-        return savedUser;
     }
 
     @Override

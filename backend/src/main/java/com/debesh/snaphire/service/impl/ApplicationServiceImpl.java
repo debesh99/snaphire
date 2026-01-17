@@ -1,8 +1,8 @@
 package com.debesh.snaphire.service.impl;
 
-import com.debesh.snaphire.Exception.ApplicationNotFoundException;
-import com.debesh.snaphire.Exception.JobNotFoundException;
-import com.debesh.snaphire.Exception.UserNotFoundException;
+import com.debesh.snaphire.exception.ApplicationNotFoundException;
+import com.debesh.snaphire.exception.JobNotFoundException;
+import com.debesh.snaphire.exception.UserNotFoundException;
 import com.debesh.snaphire.entity.Application;
 import com.debesh.snaphire.entity.Job;
 import com.debesh.snaphire.entity.User;
@@ -46,7 +46,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         application.setCandidate(candidate);
         application.setJob(job);
 
-        Application savedApp = applicationRepository.save(application);
+        applicationRepository.save(application);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.debesh.snaphire.Model;
+package com.debesh.snaphire.model;
 
 public class ErrorOutputModel {
     private int errorCode;
