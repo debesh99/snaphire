@@ -1,5 +1,6 @@
 package com.debesh.snaphire.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -13,10 +14,12 @@ public class Application {
 
     @ManyToOne
     @JoinColumn(name="job_id")
+    @JsonIgnore
     private Job job;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User candidate;
 
     public Application(LocalDateTime appliedAt, Job job, User candidate) {

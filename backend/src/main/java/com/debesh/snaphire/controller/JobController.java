@@ -28,21 +28,21 @@ public class JobController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Job> getJobById(@PathVariable Long id) {
+    public ResponseEntity<Job> getJobById(@PathVariable("id") Long id) {
         LOGGER.info("Fetching job by id: {}", id);
         Job job = jobService.getJobById(id);
         return new ResponseEntity<>(job, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteJobById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteJobById(@PathVariable("id") Long id) {
         LOGGER.info("Deleting job by id: {}", id);
         jobService.deleteJobById(id);
         return new ResponseEntity<>("Job deleted successfully", HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateJob(@PathVariable Long id, @RequestBody Job updatedJob) {
+    public ResponseEntity<String> updateJob(@PathVariable("id") Long id, @RequestBody Job updatedJob) {
         LOGGER.info("Updating job id {}: {}", id, updatedJob);
         jobService.updateJob(id, updatedJob);
         return new ResponseEntity<>("Job updated successfully", HttpStatus.OK);

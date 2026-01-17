@@ -4,6 +4,8 @@ import com.debesh.snaphire.Model.Role;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "app_users")
+//User is a reserved keyword in pl-sql so user table can't be created with this name so renamed to app_users
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +21,9 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+
+    public User() {
     }
 
     public Long getId() {

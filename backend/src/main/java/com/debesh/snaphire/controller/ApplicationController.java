@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/applications")
 public class ApplicationController {
     @Autowired
@@ -17,25 +18,25 @@ public class ApplicationController {
 
     // POST: /applications/apply?userId=1&jobId=5
     @PostMapping("/apply")
-    public ResponseEntity<String> applyForJob(@RequestParam Long userId, @RequestParam Long jobId) {
+    public ResponseEntity<String> applyForJob(@RequestParam("userId") Long userId, @RequestParam("jobId") Long jobId) {
         applicationService.applyForJob(userId, jobId);
         return new ResponseEntity<>("Application created successfully", HttpStatus.CREATED);
     }
 
     @GetMapping("/job/{jobId}")
-    public ResponseEntity<List<Application>> getApplicationsForJob(@PathVariable Long jobId) {
+    public ResponseEntity<List<Application>> getApplicationsForJob(@PathVariable("jobId") Long jobId) {
         return ResponseEntity.ok(applicationService.getApplicationsByJobId(jobId));
     }
 
     // GET: /applications/1 (Get details of a single application)
     @GetMapping("/{id}")
-    public ResponseEntity<Application> getApplicationById(@PathVariable Long id) {
+    public ResponseEntity<Application> getApplicationById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(applicationService.getApplicationById(id));
     }
 
     // DELETE: /applications/1
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteApplication(@PathVariable Long id) {
+    public ResponseEntity<String> deleteApplication(@PathVariable("id") Long id) {
         applicationService.deleteApplication(id);
         return ResponseEntity.ok("Application withdrawn/deleted successfully");
     }
