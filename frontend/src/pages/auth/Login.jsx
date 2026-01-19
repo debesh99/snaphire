@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import Navbar from '../../components/Footer';
+import { jwtDecode } from "jwt-decode"; // Add to top of file
 
 const Login = () => {
     const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Login = () => {
             
             // 1. Save the Token to LocalStorage
             localStorage.setItem('token', response.data.token);
+            const decoded = jwtDecode(response.data.token);
             
             // 2. Redirect to the Job Feed (we will create this later)
             navigate('/jobs'); 
