@@ -1,8 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/SignUp';
-import RecruiterFeed from './pages/recruiter/recruiterFeed';
 import JobFeed from './pages/JobFeed';
+import PostJob from './pages/PostJob';
+import ViewApplicants from './pages/ViewApplicants';
+import JobDetails from './pages/JobDetails';
 
 function App() {
   return (
@@ -10,9 +12,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        {/* <Route path="/jobs" element={<RecruiterFeed />} /> */}
         <Route path="/jobs" element={<JobFeed />} />
-        {/* We will add /jobs later */}
+        <Route path="/post-job" element={<PostJob />} />
+        <Route path="/jobs/:jobId/applicants" element={<ViewApplicants />} />
+        <Route path="/jobs/:id" element={<JobDetails />} />
       </Routes>
     </Router>
   );

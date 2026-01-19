@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import JobCard from '../components/JobCard';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const JobFeed = () => {
-    // 1. DEMO DATA (Hardcoded jobs to test the grid)
+    // 1. DEMO DATA (Fixed unique IDs to prevent React errors)
     const demoJobs = [
         {
             id: 1,
@@ -48,28 +49,30 @@ const JobFeed = () => {
             location: "Remote"
         },
         {
-            id: 6,
-            title: "QA Tester",
-            description: "Manual and automated testing for web applications. Selenium experience required.",
-            experienceRequired: 1,
-            location: "Remote"
+            id: 7, // Fixed ID
+            title: "UI/UX Designer",
+            description: "Create intuitive user experiences and wireframes using Figma and Adobe XD.",
+            experienceRequired: 2,
+            location: "Austin, USA"
         },
         {
-            id: 6,
-            title: "QA Tester",
-            description: "Manual and automated testing for web applications. Selenium experience required.",
-            experienceRequired: 1,
+            id: 8, // Fixed ID
+            title: "Mobile Developer",
+            description: "iOS and Android development using Flutter or React Native.",
+            experienceRequired: 3,
             location: "Remote"
         }
     ];
 
-    // 2. STATE (Initialized with demo data)
+    // 2. STATE 
     const [jobs, setJobs] = useState(demoJobs);
+    const [loading, setLoading] = useState(false);
     
-    // HARDCODED ROLE FOR TESTING (Change to 'CANDIDATE' to test the other view)
-    const [role, setRole] = useState('RECRUITER'); 
+    // HARDCODED ROLE FOR TESTING 
+    // Change to 'CANDIDATE' to hide the "Post Job" and "Delete" buttons
+    const [role, setRole] = useState('RECRUITER'); // 'RECRUITER' or 'CANDIDATE'
 
-    // Fake Delete Function (Just removes it from the screen)
+    // Fake Delete Function
     const handleDelete = (id) => {
         if(window.confirm("Delete this job?")) {
             setJobs(jobs.filter(job => job.id !== id));
@@ -77,38 +80,59 @@ const JobFeed = () => {
     };
 
     return (
-        <div className="min-vh-100 bg-light">
-            {/* Navbar would go here */}
+        // OUTER CONTAINER: Forces the page to take full height and uses Flexbox
+        <div className="min-vh-100 d-flex flex-column bg-light">
             
-            <div className="container py-5">
-                {/* 1. Header Section */}
+            {/* 1. Navbar at the top */}
+            <Navbar />
+            
+            {/* 2. Main Content: flex-grow-1 pushes the footer down */}
+            <div className="container py-5 flex-grow-1">
+                
+                {/* Header Section */}
                 <div className="d-flex justify-content-between align-items-center mb-5">
                     <div>
                         <h2 className="fw-bold text-dark">Current Openings</h2>
                         <p className="text-muted">Find your dream job or hire the best talent.</p>
                     </div>
                     
-                    {/* Test Button Visibility */}
+                    {/* Post Job Button (Recruiter Only) */}
                     {role === 'RECRUITER' && (
-                        <button className="btn btn-primary btn-lg shadow-sm">
-                            <i className="fas fa-plus me-2"></i> Post New Job
+                        <button className="btn btn-primary btn-lg shadow-sm" onClick={() => window.location.href = '/post-job'}>
+                            Post New Job
                         </button>
                     )}
                 </div>
 
-                {/* 2. The Grid Layout */}
-                <div className="row g-4"> 
-                    {/* g-4 adds a gap between cards */}
-                    {jobs.map(job => (
-                        <JobCard 
-                            key={job.id} 
-                            job={job} 
-                            role={role} 
-                            onDelete={handleDelete} 
-                        />
-                    ))}
-                </div>
+                {/* Grid Section */}
+                {loading ? (
+                    <div className="text-center mt-5">
+                        <div className="spinner-border text-primary" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                ) : jobs.length > 0 ? (
+                    <div className="row g-4">
+                        {jobs.map(job => (
+                            <JobCard 
+                                key={job.id} 
+                                job={job} 
+                                role={role} 
+                                onDelete={handleDelete} 
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    // Empty State Design
+                    <div className="text-center mt-5 p-5 bg-white rounded shadow-sm">
+                        <i className="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                        <p className="text-muted">No jobs available at the moment.</p>
+                    </div>
+                )}
             </div>
+
+            {/* 3. Footer at the bottom */}
+            <Footer />
         </div>
     );
 };

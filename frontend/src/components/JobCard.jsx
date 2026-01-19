@@ -1,11 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const JobCard = ({ job, role, onDelete }) => {
+    // 1. STATE FOR APPLYING
+    const [isApplied, setIsApplied] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    // 2. HANDLE APPLY CLICK
+    const handleApply = () => {
+        setIsLoading(true);
+        
+        // Simulate Backend Delay (1 second)
+        setTimeout(() => {
+            setIsLoading(false);
+            setIsApplied(true);
+            // alert(`Applied to ${job.title} successfully!`); // Optional
+        }, 1000);
+    };
+
     return (
-        <div className="col-12 col-md-6 col-lg-4"> {/* Responsive Grid Logic */}
+        <div className="col-12 col-md-6 col-lg-4">
             <div className="card h-100 shadow border-0 hover-card">
-                {/* Fallback image if unsplash is slow, or remove src entirely */}
+                {/* Image Section */}
                 <div style={{ height: '180px', backgroundColor: '#e9ecef', overflow: 'hidden' }}>
                      <img 
                         src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=500&auto=format&fit=crop&q=60"
@@ -15,6 +31,7 @@ const JobCard = ({ job, role, onDelete }) => {
                      />
                 </div>
 
+                {/* Body Section */}
                 <div className="card-body p-4">
                     <div className="d-flex justify-content-between align-items-start mb-2">
                         <h5 className="card-title fw-bold text-dark mb-0">{job.title}</h5>
@@ -26,12 +43,18 @@ const JobCard = ({ job, role, onDelete }) => {
                     </p>
 
                     <p className="card-text text-secondary" style={{ fontSize: '0.9rem' }}>
-                        {job.description}
+                        {job.description.substring(0, 100)}...
                     </p>
+                    
+                    {/* View Details Link (For reading full description) */}
+                    <Link to={`/jobs/${job.id}`} className="text-decoration-none small fw-bold">
+                        Read full description <i className="fas fa-arrow-right ms-1"></i>
+                    </Link>
                 </div>
 
+                {/* Footer Section */}
                 <div className="card-footer bg-white border-top-0 p-4 pt-0">
-                    <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex justify-content-between align-items-center mt-3">
                         <span className="text-muted small fw-bold">
                             Exp: {job.experienceRequired} Years
                         </span>
@@ -44,13 +67,24 @@ const JobCard = ({ job, role, onDelete }) => {
                                 >
                                     <i className="fas fa-trash"></i>
                                 </button>
-                                <button className="btn btn-dark btn-sm">
+                                <Link to={`/jobs/${job.id}/applicants`} className="btn btn-dark btn-sm">
                                     Applicants
-                                </button>
+                                </Link>
                             </div>
                         ) : (
-                            <button className="btn btn-primary w-100">
-                                Apply Now
+                            // --- CANDIDATE BUTTON LOGIC ---
+                            <button 
+                                className={`btn ${isApplied ? 'btn-success' : 'btn-primary'} w-100`}
+                                onClick={handleApply}
+                                disabled={isApplied || isLoading}
+                            >
+                                {isLoading ? (
+                                    <span><i className="fas fa-spinner fa-spin me-2"></i>Sending...</span>
+                                ) : isApplied ? (
+                                    <span><i className="fas fa-check me-2"></i>Applied</span>
+                                ) : (
+                                    "Apply Now"
+                                )}
                             </button>
                         )}
                     </div>
