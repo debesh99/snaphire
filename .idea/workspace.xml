@@ -4,31 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="662ede2d-d3a0-4193-a6e3-214a2af0dc94" name="Changes" comment="Rectifies errors and optimized code">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/config/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/controller/AuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/filter/JwtFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/model/AuthRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/model/AuthResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/impl/CustomUserDetailsService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/util/JwtUtil.java" afterDir="false" />
+    <list default="true" id="662ede2d-d3a0-4193-a6e3-214a2af0dc94" name="Changes" comment="Added JWT security layer">
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/auth/Login.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/auth/SignUp.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/Exception/ApplicationNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/exception/ApplicationNotFoundException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/Exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/Exception/JobNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/exception/JobNotFoundException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/Exception/UserNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/exception/UserNotFoundException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/Model/ErrorOutputModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/model/ErrorOutputModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/Model/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/model/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/controller/JobController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/controller/JobController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/JobService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/JobService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/impl/ApplicationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/impl/ApplicationServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/impl/JobServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/impl/JobServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,6 +71,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "project.structure.last.edited": "Project",
@@ -365,7 +350,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768635536479</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Added JWT security layer">
+      <option name="closed" value="true" />
+      <created>1768640891957</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1768640891957</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -383,7 +376,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="established proper connection with database" />
     <MESSAGE value="added method to job controller" />
     <MESSAGE value="rectified all controller methods and added company based methods" />
     <MESSAGE value="added company classes" />
@@ -408,7 +400,8 @@
     <MESSAGE value="Added user repo, interface &amp; service class" />
     <MESSAGE value="Added Application repo, interface &amp; service class" />
     <MESSAGE value="Rectifies errors and optimized code" />
-    <option name="LAST_COMMIT_MESSAGE" value="Rectifies errors and optimized code" />
+    <MESSAGE value="Added JWT security layer" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added JWT security layer" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/snaphire$SnaphireApplication.ic" NAME="SnaphireApplication Coverage Results" MODIFIED="1768118542491" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
