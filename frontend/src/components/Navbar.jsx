@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Navbar = () => {
+// New Prop: onSearch (function to handle typing)
+const Navbar = ({ onSearch }) => {
   const navigate = useNavigate();
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
+  const [searchInput, setSearchInput] = useState('');
 
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
 
@@ -12,39 +14,51 @@ const Navbar = () => {
     navigate('/');
   };
 
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchInput(value);
+    if (onSearch) {
+      onSearch(value);
+    }
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+    <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#969fa8' }}>
       <div className="container-fluid">
-        {/* Brand Logo */}
-        <Link className="navbar-brand fw-bold" to="/jobs">
-          <i className="fas fa-cubes me-2" style={{ color: '#ff6219' }}></i>
-          Snaphire
+        <Link className="navbar-brand fw-bold" to="/jobs" style={{ fontSize: '1.5rem', letterSpacing: '0.5px' }}>
+          <i className="fas fa-cubes me-2" style={{ color: '#ff4500' }}></i>
+          <span style={{ color: '#ffffff' }}>Snaphire</span>
         </Link>
 
-        {/* Mobile Toggler Button */}
         <button
-          className="navbar-toggler"
+          className="navbar-toggler navbar-toggler-white"
           type="button"
-          aria-controls="navbarNavAltMarkup"
-          aria-expanded={!isNavCollapsed}
-          aria-label="Toggle navigation"
           onClick={handleNavCollapse}
+          style={{ borderColor: 'rgba(255, 255, 255, 0.5)' }}
         >
-          <i className="fas fa-bars"></i>
+          <i className="fas fa-bars" style={{ color: '#ffffff' }}></i>
         </button>
 
-        {/* Menu Items */}
         <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} id="navbarNavAltMarkup">
-          <div className="navbar-nav ms-auto"> {/* ms-auto pushes items to the right */}
-            
-            <Link className="nav-link active" to="/jobs">Home</Link>
-            
-            {/* We can add more links here later, like 'Profile' or 'Applications' */}
-            
+          
+          {/* --- SEARCH BAR (Always shows) --- */}
+          <div className="mx-auto my-2 my-lg-0 d-flex w-50">
+              <input 
+                  type="text" 
+                  className="form-control" 
+                  placeholder="Search jobs by title..." 
+                  value={searchInput}
+                  onChange={handleSearchChange}
+                  style={{ backgroundColor: '#ffffff', borderColor: '#ffffff', color: '#000000' }}
+              />
+          </div>
+
+          <div className="navbar-nav ms-auto">
+            <Link className="nav-link" to="/jobs" style={{ color: '#ffffff', fontWeight: '500' }}>Home</Link>
             <button 
                 className="nav-link btn btn-link text-start" 
                 onClick={handleLogout} 
-                style={{ textDecoration: 'none' }}
+                style={{ textDecoration: 'none', color: '#ffffff', fontWeight: '500' }}
             >
                 Logout
             </button>

@@ -67,10 +67,20 @@ const JobFeed = () => {
     // 2. STATE 
     const [jobs, setJobs] = useState(demoJobs);
     const [loading, setLoading] = useState(false);
+
+    // --- NEW SEARCH STATE ---
+    const [searchTerm, setSearchTerm] = useState("");
     
     // HARDCODED ROLE FOR TESTING 
     // Change to 'CANDIDATE' to hide the "Post Job" and "Delete" buttons
     const [role, setRole] = useState('RECRUITER'); // 'RECRUITER' or 'CANDIDATE'
+
+    // --- FILTERING LOGIC ---
+    // We create a NEW array that only contains jobs matching the search
+    const filteredJobs = jobs.filter(job => 
+        job.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        job.location.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     // Fake Delete Function
     const handleDelete = (id) => {
@@ -83,8 +93,8 @@ const JobFeed = () => {
         // OUTER CONTAINER: Forces the page to take full height and uses Flexbox
         <div className="min-vh-100 d-flex flex-column bg-light">
             
-            {/* 1. Navbar at the top */}
-            <Navbar />
+            {/* 1. Navbar at the top with search handler */}
+            <Navbar onSearch={setSearchTerm} />
             
             {/* 2. Main Content: flex-grow-1 pushes the footer down */}
             <div className="container py-5 flex-grow-1">
@@ -113,14 +123,23 @@ const JobFeed = () => {
                     </div>
                 ) : jobs.length > 0 ? (
                     <div className="row g-4">
-                        {jobs.map(job => (
-                            <JobCard 
-                                key={job.id} 
-                                job={job} 
-                                role={role} 
-                                onDelete={handleDelete} 
-                            />
-                        ))}
+                        {filteredJobs.length > 0 ? (
+                            filteredJobs.map(job => (
+                                <JobCard 
+                                    key={job.id} 
+                                    job={job} 
+                                    role={role} 
+                                    onDelete={handleDelete} 
+                                />
+                            ))
+                        ) : (
+                            <div className="col-12">
+                                <div className="text-center p-5 bg-white rounded shadow-sm">
+                                    <i className="fas fa-search fa-3x text-muted mb-3"></i>
+                                    <p className="text-muted">No jobs match your search criteria.</p>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     // Empty State Design

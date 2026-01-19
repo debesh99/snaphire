@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import Navbar from '../../components/Footer';
 import { jwtDecode } from "jwt-decode"; // Add to top of file
 
 const Login = () => {
@@ -34,7 +33,7 @@ const Login = () => {
     };
 
     return (
-        <section className="vh-100" style={{ backgroundColor: '#9A616D' }}>
+        <section className="vh-100" style={{ backgroundColor: '##2C3E50' }}>
             <div className="container py-5 h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
                     <div className="col col-xl-10">
