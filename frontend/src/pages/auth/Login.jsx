@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { jwtDecode } from "jwt-decode"; // Add to top of file
+import { loginUser } from '../../services/ApiService';
+import { jwtDecode } from "jwt-decode"; 
 
 const Login = () => {
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -17,23 +18,44 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
-            const response = await axios.post('http://localhost:8080/auth/login', formData);
+            // 1. Call Backend
+            const data = await loginUser(formData);
             
-            // 1. Save the Token to LocalStorage
-            localStorage.setItem('token', response.data.token);
-            const decoded = jwtDecode(response.data.token);
-            
-            // 2. Redirect to the Job Feed (we will create this later)
-            navigate('/jobs'); 
+            // 2. Save Token
+            localStorage.setItem('token', data.token);
+
+            // 3. Decode & Save Role
+            try {
+                const decoded = jwtDecode(data.token);
+                console.log("Decoded Token:", decoded); // Check console to see structure
+                
+                // IMPORTANT: Adjust this key based on your backend JWT structure!
+                // Usually it's 'role', 'roles', or 'authorities'.
+                // For now, we try to find the role string.
+                const userRole = decoded.role || decoded.authorities || 'CANDIDATE';
+                
+                localStorage.setItem('role', userRole);
+                
+            } catch (decodeError) {
+                console.error("Token decode failed", decodeError);
+                // Fallback if decoding fails
+                localStorage.setItem('role', 'CANDIDATE'); 
+            }
+
+            // 4. Redirect to Job Feed
+            navigate('/jobs');
             
         } catch (err) {
             setError('Invalid email or password');
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <section className="vh-100" style={{ backgroundColor: '##2C3E50' }}>
+        <section className="vh-100" style={{ backgroundColor: '#2C3E50' }}>
             <div className="container py-5 h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
                     <div className="col col-xl-10">
@@ -80,8 +102,15 @@ const Login = () => {
                                                 />
                                             </div>
 
-                                            <div className="pt-1 mb-4">
-                                                <button className="btn btn-dark btn-lg btn-block" type="submit">Login</button>
+                                           <div className="pt-1 mb-4">
+                                                <button 
+                                                    className="btn btn-dark btn-lg btn-block" 
+                                                    type="submit"
+                                                    disabled={isLoading}
+                                                    style={{ backgroundColor: '#FF6219', border: 'none' }}
+                                                >
+                                                    {isLoading ? "Logging in..." : "Login"}
+                                                </button>
                                             </div>
 
                                             <p className="mb-5 pb-lg-2" style={{ color: '#393f81' }}>

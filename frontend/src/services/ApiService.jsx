@@ -21,4 +21,14 @@ export const registerUser = async (userData) => {
     }
 };
 
+// 3. Login Function
+export const loginUser = async (credentials) => {
+    try {
+        // credentials = { email, password }
+        const response = await api.post('/auth/login', credentials);
+        return response.data; // Expecting: { "token": "eyJhGcio..." }
+    } catch (error) {
+        throw error;
+    }
+};
 export default api
