@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import { registerUser } from '../../services/ApiService';
 
 const Signup = () => {
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -17,18 +19,21 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             // Calls the Backend Signup Endpoint
-            await axios.post('http://localhost:8080/users', formData);
+            await registerUser(formData);
             alert("Registration Successful! Please Login.");
             navigate('/'); // Redirect to Login page
         } catch (err) {
             alert("Registration failed. Email might already exist.");
+        } finally {
+            setIsLoading(false); // Stop loading
         }
     };
 
     return (
-        <section className="vh-100" style={{ backgroundColor: '##2C3E50' }}>
+        <section className="vh-100" style={{ backgroundColor: '#2C3E50' }}>
             <div className="container py-5 h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
                     <div className="col col-xl-10">
@@ -104,7 +109,14 @@ const Signup = () => {
                                             </div>
 
                                             <div className="pt-1 mb-4">
-                                                <button className="btn btn-dark btn-lg btn-block" type="submit">Sign Up</button>
+                                                <button 
+                                                    className="btn btn-dark btn-lg btn-block" 
+                                                    type="submit"
+                                                    disabled={isLoading}
+                                                    style={{ backgroundColor: '#FF6219', border: 'none' }} // Brand Color
+                                                >
+                                                    {isLoading ? "Signing up..." : "Sign Up"}
+                                                </button>
                                             </div>
 
                                             <p className="mb-5 pb-lg-2" style={{ color: '#393f81' }}>

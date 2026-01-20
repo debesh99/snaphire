@@ -24,7 +24,7 @@ const JobCard = ({ job, role, onDelete }) => {
                 {/* Image Section */}
                 <div style={{ height: '180px', backgroundColor: '#e9ecef', overflow: 'hidden' }}>
                      <img 
-                        src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=500&auto=format&fit=crop&q=60"
+                        src={`https://picsum.photos/id/${job.id}/500/300`}
                         className="card-img-top" 
                         alt="job cover"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}

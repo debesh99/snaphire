@@ -18,6 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +37,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // Enable cors
+                .cors(cors->cors.configurationSource(corsConfigurationSource()))
+
                 // 1. Disable CSRF (We use tokens, not cookies, so this is safe to disable)
                 .csrf(AbstractHttpConfigurer::disable)
 
@@ -78,8 +86,26 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // --- Helper Beans (Standard Boilerplate) ---
+//    CORS Setup to allow frontend
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
 
+        // Allow the frontend URL
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:5173"));
+
+        // Allow standard HTTP methods (GET, POST, etc.)
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // Allow headers (needed for sending tokens)
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    // --- Helper Beans (Standard Boilerplate) ---
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(); // Encrypts passwords
