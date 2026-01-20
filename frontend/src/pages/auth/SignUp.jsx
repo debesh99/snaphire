@@ -10,7 +10,7 @@ const Signup = () => {
         name: '',
         email: '',
         password: '',
-        role: 'CANDIDATE' // Default value
+        role: 'CANDIDATE' // Default value;
     });
 
     const handleChange = (e) => {
