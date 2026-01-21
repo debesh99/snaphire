@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import JobCard from '../components/JobCard';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -73,7 +73,12 @@ const JobFeed = () => {
     
     // HARDCODED ROLE FOR TESTING 
     // Change to 'CANDIDATE' to hide the "Post Job" and "Delete" buttons
-    const [role, setRole] = useState('RECRUITER'); // 'RECRUITER' or 'CANDIDATE'
+    const [role, setRole] = useState(''); // 'RECRUITER' or 'CANDIDATE'
+    useEffect(() => {
+        const storedRole = localStorage.getItem('role');
+        // Check if role exists, otherwise default to CANDIDATE or empty
+        setRole(storedRole || 'CANDIDATE');
+    }, []);
 
     // --- FILTERING LOGIC ---
     // We create a NEW array that only contains jobs matching the search

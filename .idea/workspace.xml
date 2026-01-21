@@ -4,11 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="662ede2d-d3a0-4193-a6e3-214a2af0dc94" name="Changes" comment="Added JWT security layer">
+    <list default="true" id="662ede2d-d3a0-4193-a6e3-214a2af0dc94" name="Changes" comment="Added cross origin to allow frontend">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/entity/Job.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/entity/Job.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/impl/CustomUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/impl/CustomUserDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/impl/JobServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/service/impl/JobServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/util/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/debesh/snaphire/util/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/PostJob.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/PostJob.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/auth/SignUp.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/auth/SignUp.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/services/ApiService.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/services/ApiService.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +54,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="AISelfReview" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -354,7 +360,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768640891957</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Added cross origin to allow frontend">
+      <option name="closed" value="true" />
+      <created>1768894064427</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1768894064427</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -372,7 +386,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added method to job controller" />
     <MESSAGE value="rectified all controller methods and added company based methods" />
     <MESSAGE value="added company classes" />
     <MESSAGE value="Rectified code" />
@@ -397,7 +410,8 @@
     <MESSAGE value="Added Application repo, interface &amp; service class" />
     <MESSAGE value="Rectifies errors and optimized code" />
     <MESSAGE value="Added JWT security layer" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added JWT security layer" />
+    <MESSAGE value="Added cross origin to allow frontend" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added cross origin to allow frontend" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/snaphire$SnaphireApplication.ic" NAME="SnaphireApplication Coverage Results" MODIFIED="1768118542491" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">

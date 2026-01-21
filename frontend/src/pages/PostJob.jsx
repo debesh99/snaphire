@@ -1,16 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { createJob } from '../services/ApiService';
 
 const PostJob = () => {
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const [userRole, setUserRole] = useState('');
+    
+    // Check if user is a RECRUITER on component mount
+    useEffect(() => {
+        const role = localStorage.getItem('role');
+        console.log("User Role from localStorage:", role);
+        setUserRole(role);
+        
+        if (role !== 'RECRUITER') {
+            alert('You must be logged in as a Recruiter to post jobs!');
+            navigate('/jobs');
+        }
+    }, [navigate]);
     
     // Form State
     const [jobData, setJobData] = useState({
         title: '',
         description: '',
+        company: '',
         experienceRequired: '',
         location: ''
     });
@@ -19,15 +35,31 @@ const PostJob = () => {
         setJobData({ ...jobData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        // FOR TESTING: Just log data and redirect
-        console.log("Job Posting Data:", jobData);
-        alert("Job Posted Successfully! (Frontend Demo)");
-        
-        // Redirect back to Feed
-        navigate('/jobs');
+        setIsLoading(true);
+
+        try {
+            // Prepare data (Convert experience to number just to be safe)
+            const payload = {
+                ...jobData,
+                experienceRequired: parseInt(jobData.experienceRequired)
+            };
+
+            // Call Backend
+            await createJob(payload);
+            
+            alert("Job Posted Successfully!");
+            
+            // Redirect back to Feed to see the new job
+            navigate('/jobs');
+            
+        } catch (error) {
+            console.error("Failed to post job", error);
+            alert("Failed to post job. Are you logged in as a Recruiter?");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -74,6 +106,20 @@ const PostJob = () => {
                                         />
                                     </div>
 
+                                    {/* Company */}
+                                    <div className="mb-3">
+                                        <label className="form-label fw-bold">Company</label>
+                                        <input 
+                                            type="text" 
+                                            name="company"
+                                            className="form-control"
+                                            placeholder="e.g. Google, Microsoft, Amazon"
+                                            value={jobData.company}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </div>
+
                                     {/* Experience */}
                                     <div className="mb-3">
                                         <label className="form-label fw-bold">Experience (Years)</label>
@@ -105,8 +151,12 @@ const PostJob = () => {
 
                                     {/* Buttons */}
                                     <div className="d-grid gap-2">
-                                        <button type="submit" className="btn btn-primary btn-lg">
-                                            Publish Job
+                                        <button 
+                                            type="submit" 
+                                            className="btn btn-primary btn-lg"
+                                            disabled={isLoading}
+                                        >
+                                            {isLoading ? "Publishing..." : "Publish Job"}
                                         </button>
                                         <button 
                                             type="button" 

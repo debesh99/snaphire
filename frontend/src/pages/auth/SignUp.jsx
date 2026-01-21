@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
 import { registerUser } from '../../services/ApiService';
 
 const Signup = () => {
@@ -10,7 +9,7 @@ const Signup = () => {
         name: '',
         email: '',
         password: '',
-        role: 'CANDIDATE' // Default value;
+        role: 'CANDIDATE' // Default value
     });
 
     const handleChange = (e) => {

@@ -1,132 +1,165 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { loginUser } from '../../services/ApiService';
-import { jwtDecode } from "jwt-decode"; 
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { loginUser } from "../../services/ApiService";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
-    const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-    });
-    const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-        try {
-            // 1. Call Backend
-            const data = await loginUser(formData);
-            
-            // 2. Save Token
-            localStorage.setItem('token', data.token);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
 
-            // 3. Decode & Save Role
-            try {
-                const decoded = jwtDecode(data.token);
-                console.log("Decoded Token:", decoded); // Check console to see structure
-                
-                // IMPORTANT: Adjust this key based on your backend JWT structure!
-                // Usually it's 'role', 'roles', or 'authorities'.
-                // For now, we try to find the role string.
-                const userRole = decoded.role || decoded.authorities || 'CANDIDATE';
-                
-                localStorage.setItem('role', userRole);
-                
-            } catch (decodeError) {
-                console.error("Token decode failed", decodeError);
-                // Fallback if decoding fails
-                localStorage.setItem('role', 'CANDIDATE'); 
-            }
+    try {
+      // 1. Call Backend
+      const data = await loginUser(formData);
 
-            // 4. Redirect to Job Feed
-            navigate('/jobs');
-            
-        } catch (err) {
-            setError('Invalid email or password');
-        } finally {
-            setIsLoading(false);
+      // 2. Save Token
+      localStorage.setItem("token", data.token);
+
+      // 3. Decode & Save Role
+      try {
+        const decoded = jwtDecode(data.token);
+        console.log("Full Decoded Token:", decoded); // Debugging line
+
+        // --- FIX: DECLARE VARIABLE FIRST ---
+       let userRole = "CANDIDATE"; // Default fallback
+
+        // --- THEN CHECK KEYS ---
+        if (decoded.role) {
+          userRole = decoded.role;
+        } else if (decoded.roles) {
+          userRole = decoded.roles; // Spring often uses this
+        } else if (decoded.authorities) {
+          userRole = decoded.authorities;
         }
-    };
 
-    return (
-        <section className="vh-100" style={{ backgroundColor: '#2C3E50' }}>
-            <div className="container py-5 h-100">
-                <div className="row d-flex justify-content-center align-items-center h-100">
-                    <div className="col col-xl-10">
-                        <div className="card" style={{ borderRadius: '1rem' }}>
-                            <div className="row g-0">
-                                <div className="col-md-6 col-lg-5 d-none d-md-block">
-                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
-                                        alt="login form" className="img-fluid" style={{ borderRadius: '1rem 0 0 1rem' }} />
-                                </div>
-                                <div className="col-md-6 col-lg-7 d-flex align-items-center">
-                                    <div className="card-body p-4 p-lg-5 text-black">
+        // Handle cases where role is an array like ["RECRUITER"]
+        if (Array.isArray(userRole)) {
+          userRole = userRole[0];
+        }
 
-                                        <form onSubmit={handleSubmit}>
-                                            <div className="d-flex align-items-center mb-3 pb-1">
-                                                <i className="fas fa-cubes fa-2x me-3" style={{ color: '#ff6219' }}></i>
-                                                <span className="h1 fw-bold mb-0">Snaphire</span>
-                                            </div>
+        // Handle cases where role is an object like { authority: "RECRUITER" }
+        if (typeof userRole === "object" && userRole.authority) {
+          userRole = userRole.authority;
+        }
 
-                                            <h5 className="fw-normal mb-3 pb-3" style={{ letterSpacing: '1px' }}>Sign into your account</h5>
+        console.log("Final Role extracted:", userRole);
+        localStorage.setItem("role", userRole);
+      } catch (decodeError) {
+        console.error("Token decode failed", decodeError);
+        localStorage.setItem("role", "CANDIDATE");
+      }
 
-                                            {error && <div className="alert alert-danger">{error}</div>}
+      // 4. Redirect
+      navigate("/jobs");
+    } catch (err) {
+      console.error("Login Error:", err);
+      setError("Invalid email or password");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-                                            <div className="form-outline mb-4">
-                                                <input 
-                                                    type="email" 
-                                                    name="email"
-                                                    className="form-control form-control-lg" 
-                                                    placeholder="Email address"
-                                                    value={formData.email}
-                                                    onChange={handleChange}
-                                                    required
-                                                />
-                                            </div>
-
-                                            <div className="form-outline mb-4">
-                                                <input 
-                                                    type="password" 
-                                                    name="password"
-                                                    className="form-control form-control-lg" 
-                                                    placeholder="Password"
-                                                    value={formData.password}
-                                                    onChange={handleChange}
-                                                    required
-                                                />
-                                            </div>
-
-                                           <div className="pt-1 mb-4">
-                                                <button 
-                                                    className="btn btn-dark btn-lg btn-block" 
-                                                    type="submit"
-                                                    disabled={isLoading}
-                                                    style={{ backgroundColor: '#FF6219', border: 'none' }}
-                                                >
-                                                    {isLoading ? "Logging in..." : "Login"}
-                                                </button>
-                                            </div>
-
-                                            <p className="mb-5 pb-lg-2" style={{ color: '#393f81' }}>
-                                                Don't have an account? <Link to="/signup" style={{ color: '#393f81' }}>Register here</Link>
-                                            </p>
-                                        </form>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+  return (
+    <section className="vh-100" style={{ backgroundColor: "#2C3E50" }}>
+      <div className="container py-5 h-100">
+        <div className="row d-flex justify-content-center align-items-center h-100">
+          <div className="col col-xl-10">
+            <div className="card" style={{ borderRadius: "1rem" }}>
+              <div className="row g-0">
+                <div className="col-md-6 col-lg-5 d-none d-md-block">
+                  <img
+                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
+                    alt="login form"
+                    className="img-fluid"
+                    style={{ borderRadius: "1rem 0 0 1rem" }}
+                  />
                 </div>
+                <div className="col-md-6 col-lg-7 d-flex align-items-center">
+                  <div className="card-body p-4 p-lg-5 text-black">
+                    <form onSubmit={handleSubmit}>
+                      <div className="d-flex align-items-center mb-3 pb-1">
+                        <i
+                          className="fas fa-cubes fa-2x me-3"
+                          style={{ color: "#ff6219" }}
+                        ></i>
+                        <span className="h1 fw-bold mb-0">Snaphire</span>
+                      </div>
+
+                      <h5
+                        className="fw-normal mb-3 pb-3"
+                        style={{ letterSpacing: "1px" }}
+                      >
+                        Sign into your account
+                      </h5>
+
+                      {error && (
+                        <div className="alert alert-danger">{error}</div>
+                      )}
+
+                      <div className="form-outline mb-4">
+                        <input
+                          type="email"
+                          name="email"
+                          className="form-control form-control-lg"
+                          placeholder="Email address"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+
+                      <div className="form-outline mb-4">
+                        <input
+                          type="password"
+                          name="password"
+                          className="form-control form-control-lg"
+                          placeholder="Password"
+                          value={formData.password}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+
+                      <div className="pt-1 mb-4">
+                        <button
+                          className="btn btn-dark btn-lg btn-block"
+                          type="submit"
+                          disabled={isLoading}
+                          style={{ backgroundColor: "#FF6219", border: "none" }}
+                        >
+                          {isLoading ? "Logging in..." : "Login"}
+                        </button>
+                      </div>
+
+                      <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>
+                        Don't have an account?{" "}
+                        <Link to="/signup" style={{ color: "#393f81" }}>
+                          Register here
+                        </Link>
+                      </p>
+                    </form>
+                  </div>
+                </div>
+              </div>
             </div>
-        </section>
-    );
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default Login;

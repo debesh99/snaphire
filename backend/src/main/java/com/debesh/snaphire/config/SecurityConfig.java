@@ -37,50 +37,40 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Enable cors
-                .cors(cors->cors.configurationSource(corsConfigurationSource()))
-
-                // 1. Disable CSRF (We use tokens, not cookies, so this is safe to disable)
+                // 1. DISABLE CSRF (Crucial for Stateless APIs like this)
                 .csrf(AbstractHttpConfigurer::disable)
 
-                // 2. Define the "Rule Book" (Authorization)
+                // 2. ENABLE CORS (Uses the bean defined below)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                // 3. DEFINE RULES
                 .authorizeHttpRequests(auth -> auth
-                        // --- SWAGGER UI (Allow this publicly) ---
-                        .requestMatchers(
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html"
-                        ).permitAll()
-                        // --- PUBLIC ENDPOINTS (Everyone can visit) ---
-                        .requestMatchers("/auth/**").permitAll()   // Login endpoint (we will build this next)
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll() // Signup endpoint
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // Allow Swagger UI (Optional but good to have)
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
 
-                        // --- RECRUITER ONLY ---
-                        // Only recruiters can POST (create) jobs
-                        .requestMatchers(HttpMethod.POST, "/jobs/**").hasRole("RECRUITER")
-                        // Only recruiters can DELETE jobs
-                        .requestMatchers(HttpMethod.DELETE, "/jobs/**").hasRole("RECRUITER")
-                        // Only recruiters can see who applied
-                        .requestMatchers("/applications/job/**").hasRole("RECRUITER")
+                        // PUBLIC ENDPOINTS (No Token Required)
+                        .requestMatchers("/auth/**").permitAll()        // Login
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll() // Signup (Explicitly allow POST)
 
-                        // --- CANDIDATE ONLY ---
-                        // Only candidates can apply
-                        .requestMatchers("/applications/apply").hasRole("CANDIDATE")
+                        // RECRUITER ONLY
+                        // Note: using hasAuthority matches the exact string in DB ("RECRUITER")
+                        .requestMatchers(HttpMethod.POST, "/jobs/**").hasAuthority("RECRUITER")
+                        .requestMatchers(HttpMethod.DELETE, "/jobs/**").hasAuthority("RECRUITER")
+                        .requestMatchers("/applications/job/**").hasAuthority("RECRUITER")
 
-                        // --- AUTHENTICATED (Both Roles) ---
-                        // Both can view the job feed
-                        .requestMatchers(HttpMethod.GET, "/jobs/**").authenticated()
-                        // Any other link requires at least a valid token
+                        // CANDIDATE ONLY
+                        .requestMatchers("/applications/apply").hasAuthority("CANDIDATE")
+
+                        // ALL OTHER REQUESTS REQUIRE LOGIN
                         .anyRequest().authenticated()
                 )
 
-                // 3. Stateless Session (Don't save cookies/session IDs)
+                // 4. STATELESS SESSION (No Cookies)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                // 4. Set the Authentication Provider (Connects to DB)
+                // 5. ADD FILTERS
                 .authenticationProvider(authenticationProvider())
-
-                // 5. Add our Door Guard (JwtFilter) BEFORE the standard login check
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

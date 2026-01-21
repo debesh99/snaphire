@@ -13,8 +13,7 @@ public class Job {
     private String title;
     private String description;
     private String location;
-    private Long minSalary;
-    private Long maxSalary;
+    private int experienceRequired;
 
     // --- CORRECTED RELATIONSHIP ---
     // 1. Must be a List (One Job -> Many Applications)
@@ -23,14 +22,13 @@ public class Job {
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Application> applications;
 
-    public Job(Long id, String title, String company, String description, String location, Long minSalary, Long maxSalary, List<Application> applications) {
+    public Job(Long id, String company, String title, String description, String location, int experienceRequired, List<Application> applications) {
         this.id = id;
-        this.company=company;
+        this.company = company;
         this.title = title;
         this.description = description;
         this.location = location;
-        this.minSalary = minSalary;
-        this.maxSalary = maxSalary;
+        this.experienceRequired = experienceRequired;
         this.applications = applications;
     }
 
@@ -77,20 +75,12 @@ public class Job {
         this.location = location;
     }
 
-    public Long getMinSalary() {
-        return minSalary;
+    public int getExperienceRequired() {
+        return experienceRequired;
     }
 
-    public void setMinSalary(Long minSalary) {
-        this.minSalary = minSalary;
-    }
-
-    public Long getMaxSalary() {
-        return maxSalary;
-    }
-
-    public void setMaxSalary(Long maxSalary) {
-        this.maxSalary = maxSalary;
+    public void setExperienceRequired(int experienceRequired) {
+        this.experienceRequired = experienceRequired;
     }
 
     public List<Application> getApplications() {
@@ -105,13 +95,11 @@ public class Job {
     public String toString() {
         return "Job{" +
                 "id=" + id +
-                ", company='" + company +'\'' +
+                ", company='" + company + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", location='" + location + '\'' +
-                ", minSalary=" + minSalary +
-                ", maxSalary=" + maxSalary +
-                ", applications=" + applications +
+                ", experienceRequired=" + experienceRequired +
                 '}';
     }
 }

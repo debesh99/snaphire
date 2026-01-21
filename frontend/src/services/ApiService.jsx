@@ -10,6 +10,20 @@ const api = axios.create({
     },
 });
 
+// This automatically adds the JWT Token to every request!
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token');
+        if (token && !config.url.includes('/auth') && !config.url.includes('/users')) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
 // 2. Signup Function
 export const registerUser = async (userData) => {
     try {
@@ -30,5 +44,11 @@ export const loginUser = async (credentials) => {
     } catch (error) {
         throw error;
     }
+};
+
+// 4. Create/Post Job Function
+export const createJob = async (jobData) => {
+    // jobData = { title, description, location, experienceRequired }
+    return (await api.post('/jobs', jobData)).data;
 };
 export default api

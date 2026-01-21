@@ -23,12 +23,15 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-        // 2. Translate it to a Spring Security UserDetails object
-        // We map our "Role" (RECRUITER) to a "GrantedAuthority" (ROLE_RECRUITER)
+        // 2. CRITICAL STEP: Map the Role to an Authority
+        // We use user.getRole().name() to get "RECRUITER" or "CANDIDATE"
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().name());
+
+        // 3. We map our authority (RECRUITER) to a "GrantedAuthority" (ROLE_RECRUITER)
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(), // This is the hashed password from DB
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
+                Collections.singletonList(authority)
         );
     }
 }
