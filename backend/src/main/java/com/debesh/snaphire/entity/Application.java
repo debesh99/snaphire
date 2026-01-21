@@ -1,8 +1,7 @@
 package com.debesh.snaphire.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,63 +11,45 @@ public class Application {
     private Long id;
     private LocalDateTime appliedAt = LocalDateTime.now();
 
+    // NEW: Status Field (Default to "Pending")
+    private String status = "Pending";
+
     @ManyToOne
     @JoinColumn(name="job_id")
-    @JsonIgnore
+    // Keep JsonIgnoreProperties here to avoid circular loops if Job has list of applications
+    @JsonIgnoreProperties({"applications", "hibernateLazyInitializer", "handler"})
     private Job job;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
+    // FIX: Removed @JsonIgnore
+    // ADDED: @JsonIgnoreProperties to hide password and prevent circular loop
+    @JsonIgnoreProperties({"password", "role", "applications", "hibernateLazyInitializer", "handler"})
     private User candidate;
 
-    public Application(LocalDateTime appliedAt, Job job, User candidate) {
+    public Application(LocalDateTime appliedAt, Job job, User candidate, String status) {
         this.appliedAt = appliedAt;
         this.job = job;
         this.candidate = candidate;
+        this.status = status;
     }
 
     public Application(){}
 
-    public Long getId() {
-        return id;
-    }
+    // ... Getters and Setters ...
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public LocalDateTime getAppliedAt() {
-        return appliedAt;
-    }
+    public LocalDateTime getAppliedAt() { return appliedAt; }
+    public void setAppliedAt(LocalDateTime appliedAt) { this.appliedAt = appliedAt; }
 
-    public void setAppliedAt(LocalDateTime appliedAt) {
-        this.appliedAt = appliedAt;
-    }
+    public Job getJob() { return job; }
+    public void setJob(Job job) { this.job = job; }
 
-    public Job getJob() {
-        return job;
-    }
+    public User getCandidate() { return candidate; }
+    public void setCandidate(User candidate) { this.candidate = candidate; }
 
-    public void setJob(Job job) {
-        this.job = job;
-    }
-
-    public User getCandidate() {
-        return candidate;
-    }
-
-    public void setCandidate(User candidate) {
-        this.candidate = candidate;
-    }
-
-    @Override
-    public String toString() {
-        return "Application{" +
-                "id=" + id +
-                ", appliedAt=" + appliedAt +
-                ", jobId=" + (job != null ? job.getId() : "null") + // Print ID only
-                ", candidateId=" + (candidate != null ? candidate.getId() : "null") + // Print ID only
-                '}';
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

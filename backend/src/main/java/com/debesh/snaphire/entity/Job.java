@@ -11,6 +11,7 @@ public class Job {
     private Long id;
     private String company;
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String location;
     private int experienceRequired;

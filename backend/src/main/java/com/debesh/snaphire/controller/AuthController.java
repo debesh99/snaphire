@@ -47,7 +47,7 @@ public class AuthController {
 
             // 3. Generate Token (Fix: Convert Enum to String)
             // We use .name() to turn Role.RECRUITER into "RECRUITER"
-            String token = jwtUtil.generateToken(authRequest.getEmail(), user.getRole().name());
+            String token = jwtUtil.generateToken(authRequest.getEmail(), user.getRole().name(), user.getId());
 
             return ResponseEntity.ok(new AuthResponse(token));
         } else {

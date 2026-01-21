@@ -40,4 +40,10 @@ public class ApplicationController {
         applicationService.deleteApplication(id);
         return ResponseEntity.ok("Application withdrawn/deleted successfully");
     }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<String> updateStatus(@PathVariable("id") Long id, @RequestParam("status") String status) {
+        applicationService.updateApplicationStatus(id, status);
+        return ResponseEntity.ok("Status updated to " + status);
+    }
 }

@@ -21,9 +21,10 @@ public class JwtUtil {
     private final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET_STRING.getBytes());
 
     // 2. Generate Token (The "Badge Making" machine)
-    public String generateToken(String username, String role) {
+    public String generateToken(String username, String role, Long userId) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
+        claims.put("userId", userId);
         return createToken(claims, username);
     }
 

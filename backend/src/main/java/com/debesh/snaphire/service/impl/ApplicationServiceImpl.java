@@ -76,4 +76,13 @@ public class ApplicationServiceImpl implements ApplicationService {
         applicationRepository.deleteById(id);
         LOGGER.info("Application ID {} deleted", id);
     }
+
+    @Override
+    public void updateApplicationStatus(Long id, String status) {
+        Application app = applicationRepository.findById(id)
+                .orElseThrow(() -> new ApplicationNotFoundException("Application not found"));
+
+        app.setStatus(status);
+        applicationRepository.save(app);
+    }
 }
