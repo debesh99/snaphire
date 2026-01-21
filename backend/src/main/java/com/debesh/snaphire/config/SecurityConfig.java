@@ -45,24 +45,30 @@ public class SecurityConfig {
 
                 // 3. DEFINE RULES
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // Allow Swagger UI (Optional but good to have)
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
-
-                        // PUBLIC ENDPOINTS (No Token Required)
+                        // 1. PUBLIC ENDPOINTS (Everyone can see these)
                         .requestMatchers("/auth/**").permitAll()        // Login
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll() // Signup (Explicitly allow POST)
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll() // Signup
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Pre-flight checks
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll() // Swagger
 
-                        // RECRUITER ONLY
-                        // Note: using hasAuthority matches the exact string in DB ("RECRUITER")
-                        .requestMatchers(HttpMethod.POST, "/jobs/**").hasAuthority("RECRUITER")
+                        // 2. RECRUITER ONLY (Strict Role Check)
+                        // Even if a Candidate types these URLs, the server will reject them (403 Forbidden)
+                        .requestMatchers(HttpMethod.POST, "/jobs").hasAuthority("RECRUITER")
                         .requestMatchers(HttpMethod.DELETE, "/jobs/**").hasAuthority("RECRUITER")
-                        .requestMatchers("/applications/job/**").hasAuthority("RECRUITER")
+                        .requestMatchers("/applications/job/**").hasAuthority("RECRUITER") // View Applicants
+                        .requestMatchers(HttpMethod.PUT, "/applications/**/status").hasAuthority("RECRUITER") // Update Status
+                        .requestMatchers(HttpMethod.DELETE, "/applications/**").hasAuthority("RECRUITER") // Reject Application
 
-                        // CANDIDATE ONLY
+                        // 3. CANDIDATE ONLY
                         .requestMatchers("/applications/apply").hasAuthority("CANDIDATE")
 
-                        // ALL OTHER REQUESTS REQUIRE LOGIN
+                        // 4. AUTHENTICATED COMMON ENDPOINTS (Both can access)
+                        // e.g., Viewing the Job Feed is allowed for both roles
+                        .requestMatchers(HttpMethod.GET, "/jobs/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/applications/**").authenticated() // View own application status
+
+                        // 5. CATCH-ALL: DENY EVERYTHING ELSE
+                        // If it's not listed above, nobody gets in.
                         .anyRequest().authenticated()
                 )
 
