@@ -51,4 +51,38 @@ export const createJob = async (jobData) => {
     // jobData = { title, description, location, experienceRequired }
     return (await api.post('/jobs', jobData)).data;
 };
+
+//5. Job Feed Related Functions
+
+// i. Get All Jobs
+export const getAllJobs = async () => {
+    return (await api.get('/jobs')).data;
+};
+
+// ii. Delete Job
+export const deleteJob = async (id) => {
+    return (await api.delete(`/jobs/${id}`)).data;
+};
+
+// iii. Apply for Job
+export const applyForJob = async (userId, jobId) => {
+    // Sending jobId and userId as query parameters.
+    return (await api.post(`/applications/apply?userId=${userId}&jobId=${jobId}`)).data;
+};
+
+// iv. Get Applicants for a Job
+export const getApplicants = async (jobId) => {
+    return (await api.get(`/applications/job/${jobId}`)).data;
+};
+
+// v. Delete Application (Reject Candidate)
+export const deleteApplication = async (applicationId) => {
+    return (await api.delete(`/applications/${applicationId}`)).data;
+};
+
+// vi. Update Application Status
+export const updateApplicationStatus = async (applicationId, status) => {
+    return (await api.put(`/applications/${applicationId}/status?status=${status}`)).data;
+};
+
 export default api

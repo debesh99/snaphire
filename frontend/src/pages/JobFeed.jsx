@@ -1,164 +1,138 @@
-import { useState, useEffect } from 'react';
-import JobCard from '../components/JobCard';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import { useState, useEffect } from "react";
+import JobCard from "../components/JobCard";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { getAllJobs, deleteJob } from "../services/ApiService";
+import { jwtDecode } from "jwt-decode";
 
 const JobFeed = () => {
-    // 1. DEMO DATA (Fixed unique IDs to prevent React errors)
-    const demoJobs = [
-        {
-            id: 1,
-            title: "Frontend Developer",
-            description: "Looking for a React expert to build responsive UIs. Must know Redux and Tailwind CSS.",
-            experienceRequired: 2,
-            location: "Remote"
-        },
-        {
-            id: 2,
-            title: "Backend Engineer",
-            description: "Java Spring Boot developer needed for high-scale architecture. Microservices experience is a plus.",
-            experienceRequired: 4,
-            location: "New York, USA"
-        },
-        {
-            id: 3,
-            title: "Data Scientist",
-            description: "Analyze large datasets using Python and Spark. Machine Learning background preferred.",
-            experienceRequired: 3,
-            location: "London, UK"
-        },
-        {
-            id: 4,
-            title: "Product Manager",
-            description: "Lead the product roadmap and collaborate with engineering teams to deliver value.",
-            experienceRequired: 5,
-            location: "San Francisco, USA"
-        },
-        {
-            id: 5,
-            title: "DevOps Engineer",
-            description: "Manage AWS infrastructure and CI/CD pipelines. Docker and Kubernetes knowledge essential.",
-            experienceRequired: 3,
-            location: "Berlin, Germany"
-        },
-        {
-            id: 6,
-            title: "QA Tester",
-            description: "Manual and automated testing for web applications. Selenium experience required.",
-            experienceRequired: 1,
-            location: "Remote"
-        },
-        {
-            id: 7, // Fixed ID
-            title: "UI/UX Designer",
-            description: "Create intuitive user experiences and wireframes using Figma and Adobe XD.",
-            experienceRequired: 2,
-            location: "Austin, USA"
-        },
-        {
-            id: 8, // Fixed ID
-            title: "Mobile Developer",
-            description: "iOS and Android development using Flutter or React Native.",
-            experienceRequired: 3,
-            location: "Remote"
-        }
-    ];
+  const [jobs, setJobs] = useState([]); // All jobs from backend
+  const [loading, setLoading] = useState(true); // Loading state
+  const [searchTerm, setSearchTerm] = useState(""); // Search term
+  const [role, setRole] = useState(""); // User role
+  const [currentUserId, setCurrentUserId] = useState(null); // store current user ID
 
-    // 2. STATE 
-    const [jobs, setJobs] = useState(demoJobs);
-    const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    // 1. Get Role & ID from Token
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        // Standardizing extraction of Role and ID
+        const userRole =
+          decoded.role ||
+          decoded.authorities ||
+          (decoded.roles && decoded.roles[0]) ||
+          "CANDIDATE";
+        // Handle complex role objects like {authority: "RECRUITER"}
+        const finalRole =
+          typeof userRole === "object" && userRole.authority
+            ? userRole.authority
+            : userRole;
 
-    // --- NEW SEARCH STATE ---
-    const [searchTerm, setSearchTerm] = useState("");
-    
-    // HARDCODED ROLE FOR TESTING 
-    // Change to 'CANDIDATE' to hide the "Post Job" and "Delete" buttons
-    const [role, setRole] = useState(''); // 'RECRUITER' or 'CANDIDATE'
-    useEffect(() => {
-        const storedRole = localStorage.getItem('role');
-        // Check if role exists, otherwise default to CANDIDATE or empty
-        setRole(storedRole || 'CANDIDATE');
-    }, []);
+        setRole(finalRole);
 
-    // --- FILTERING LOGIC ---
-    // We create a NEW array that only contains jobs matching the search
-    const filteredJobs = jobs.filter(job => 
-        job.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        job.location.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+        // Get ID
+        const uId = decoded.userId || decoded.id;
+        setCurrentUserId(uId);
+      } catch (e) {
+        console.error("Token decode error", e);
+        setRole("CANDIDATE");
+      }
+    } else {
+      setRole("CANDIDATE");
+    }
 
-    // Fake Delete Function
-    const handleDelete = (id) => {
-        if(window.confirm("Delete this job?")) {
-            setJobs(jobs.filter(job => job.id !== id));
-        }
-    };
+    fetchJobs();
+  }, []);
 
-    return (
-        // OUTER CONTAINER: Forces the page to take full height and uses Flexbox
-        <div className="min-vh-100 d-flex flex-column bg-light">
-            
-            {/* 1. Navbar at the top with search handler */}
-            <Navbar onSearch={setSearchTerm} />
-            
-            {/* 2. Main Content: flex-grow-1 pushes the footer down */}
-            <div className="container py-5 flex-grow-1">
-                
-                {/* Header Section */}
-                <div className="d-flex justify-content-between align-items-center mb-5">
-                    <div>
-                        <h2 className="fw-bold text-dark">Current Openings</h2>
-                        <p className="text-muted">Find your dream job or hire the best talent.</p>
-                    </div>
-                    
-                    {/* Post Job Button (Recruiter Only) */}
-                    {role === 'RECRUITER' && (
-                        <button className="btn btn-primary btn-lg shadow-sm" onClick={() => window.location.href = '/post-job'}>
-                            Post New Job
-                        </button>
-                    )}
-                </div>
+  const fetchJobs = async () => {
+    try {
+      const data = await getAllJobs();
+      setJobs(data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+      setLoading(false);
+    }
+  };
 
-                {/* Grid Section */}
-                {loading ? (
-                    <div className="text-center mt-5">
-                        <div className="spinner-border text-primary" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-                ) : jobs.length > 0 ? (
-                    <div className="row g-4">
-                        {filteredJobs.length > 0 ? (
-                            filteredJobs.map(job => (
-                                <JobCard 
-                                    key={job.id} 
-                                    job={job} 
-                                    role={role} 
-                                    onDelete={handleDelete} 
-                                />
-                            ))
-                        ) : (
-                            <div className="col-12">
-                                <div className="text-center p-5 bg-white rounded shadow-sm">
-                                    <i className="fas fa-search fa-3x text-muted mb-3"></i>
-                                    <p className="text-muted">No jobs match your search criteria.</p>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                ) : (
-                    // Empty State Design
-                    <div className="text-center mt-5 p-5 bg-white rounded shadow-sm">
-                        <i className="fas fa-folder-open fa-3x text-muted mb-3"></i>
-                        <p className="text-muted">No jobs available at the moment.</p>
-                    </div>
-                )}
-            </div>
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this job?")) return;
+    try {
+      await deleteJob(id);
+      setJobs(jobs.filter((job) => job.id !== id));
+    } catch (error) {
+      alert("Failed to delete job.");
+    }
+  };
 
-            {/* 3. Footer at the bottom */}
-            <Footer />
+  const filteredJobs = jobs.filter(
+    (job) =>
+      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.company?.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
+  return (
+    <div className="min-vh-100 d-flex flex-column bg-light">
+      <Navbar onSearch={setSearchTerm} />
+      <div className="container py-5 flex-grow-1">
+        {/* ... Header Section (Same as before) ... */}
+        <div className="d-flex justify-content-between align-items-center mb-5">
+          <div>
+            <h2 className="fw-bold text-dark">Current Openings</h2>
+            <p className="text-muted">
+              {loading
+                ? "Loading..."
+                : `Found ${filteredJobs.length} active roles.`}
+            </p>
+          </div>
+          {role === "RECRUITER" && (
+            <button
+              className="btn btn-primary btn-lg shadow-sm"
+              onClick={() => (window.location.href = "/post-job")}
+            >
+              <i className="fas fa-plus me-2"></i> Post New Job
+            </button>
+          )}
         </div>
-    );
+
+        {/* Grid Section */}
+        {loading ? (
+          <div className="text-center mt-5">
+            <div className="spinner-border text-primary"></div>
+          </div>
+        ) : filteredJobs.length > 0 ? (
+          <div className="row g-4">
+            {filteredJobs.map((job) => {
+              // --- LOGIC TO CHECK IF APPLIED ---
+              // We look inside job.applications (which comes from backend)
+              // and see if any candidate.id matches our currentUserId
+              const hasApplied = job.applications?.some(
+                (app) => app.candidate?.id === currentUserId,
+              );
+
+              return (
+                <JobCard
+                  key={job.id}
+                  job={job}
+                  role={role}
+                  onDelete={handleDelete}
+                  initialAppliedStatus={hasApplied}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center mt-5 p-5 bg-white rounded shadow-sm">
+            <p className="text-muted">No jobs found.</p>
+          </div>
+        )}
+      </div>
+      <Footer />
+    </div>
+  );
 };
 
 export default JobFeed;
