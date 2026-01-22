@@ -6,6 +6,7 @@ import PostJob from './pages/PostJob';
 import ViewApplicants from './pages/ViewApplicants';
 import JobDetails from './pages/JobDetails';
 import PrivateRoutes from './utils/PrivateRoutes';
+import NotFound from './components/NotFound';
 
 function App() {
   return (
@@ -14,10 +15,12 @@ function App() {
         {/* PUBLIC ROUTES */}
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        
 
         {/* PROTECTED ROUTES (Logged in Users Only) */}
         <Route element={<PrivateRoutes />}> 
             <Route path="/jobs" element={<JobFeed />} />
+            <Route path="/jobs/:id" element={<JobDetails />} />
         </Route>
 
         {/* RECRUITER ONLY ROUTES */}
@@ -26,6 +29,7 @@ function App() {
             <Route path="/jobs/:jobId/applicants" element={<ViewApplicants />} />
         </Route>
 
+        <Route path="*" element={<NotFound />} /> // 404 Page
       </Routes>
     </BrowserRouter>
   );
