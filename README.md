@@ -1,4 +1,4 @@
-### Snaphire - Simplified Hiring Platform (Backend)
+### Snaphire - Simplified Hiring Platform
 Snaphire is a "Microservices-Ready Monolith" backend built with Spring Boot and PostgreSQL. It streamlines the connection between Recruiters and Candidates, featuring robust JWT-based security, role-based access control, and a clean architecture.
 
 ### Screenshots
