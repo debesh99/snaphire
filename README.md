@@ -2,10 +2,11 @@
 Snaphire is a "Microservices-Ready Monolith" backend built with Spring Boot and PostgreSQL. It streamlines the connection between Recruiters and Candidates, featuring robust JWT-based security, role-based access control, and a clean architecture.
 
 ### Screenshots
-<img width="1728" height="872" alt="Screenshot 2026-01-28 at 12 28 36 PM" src="https://github.com/user-attachments/assets/efce3ff4-8b20-4d98-ae87-a24d7e3cc9e2" />
-<img width="1727" height="872" alt="Screenshot 2026-01-28 at 12 28 28 PM" src="https://github.com/user-attachments/assets/430f9729-a45d-4b3a-83b6-a612ba682f20" />
 <img width="1728" height="866" alt="Screenshot 2026-01-28 at 12 27 45 PM" src="https://github.com/user-attachments/assets/a04ea1a0-a60a-4240-9b95-14168121606a" />
 <img width="1727" height="870" alt="Screenshot 2026-01-28 at 12 27 37 PM" src="https://github.com/user-attachments/assets/d21be224-83fc-48b7-909d-24c56b90f2dc" />
+<img width="1728" height="872" alt="Screenshot 2026-01-28 at 12 28 36 PM" src="https://github.com/user-attachments/assets/efce3ff4-8b20-4d98-ae87-a24d7e3cc9e2" />
+<img width="1727" height="872" alt="Screenshot 2026-01-28 at 12 28 28 PM" src="https://github.com/user-attachments/assets/430f9729-a45d-4b3a-83b6-a612ba682f20" />
+
 
 ### Screen-recordings
 
